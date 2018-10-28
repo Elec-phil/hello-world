@@ -1,0 +1,569 @@
+#include"matrix.cpp"
+#include"iostream"
+#include"conio.h"
+#include"string"
+#include"stdlib.h"
+using namespace std;
+
+void matrix_calculate();
+void matrix_menu();
+void calculate(matrix* pta[10]);
+
+matrix rc_create(int &count);
+void print_nonempty_matrix(matrix *pta[10]);
+void  print_cal_menu();
+void cal_input_12(char op, int num[3]);
+
+void matrix_plus(char op, matrix* pta[10]);
+void cal_plus(matrix* pta[10], int num[3]);
+
+void sub(char op, matrix* pta[10]);
+void cal_sub(matrix* pta[10], int  num[3]);
+
+void matrix_mul( matrix* pta[10]);
+void cal_input_matrix_mul(int num[3]);
+void cal_matrix_mul(matrix* pta[10], int num[3]);
+
+void num_matrix(matrix* pta[10]);
+float cal_input_num_matrix(int mul[2]);
+void cal_num_matrix(matrix* pta[10], int mul[2], float ft);
+
+void matrix_equal(matrix* pta[10]);
+void cal_input_equal(int num[3]);
+void cal_matrix_equal(matrix* pta[10],int num[3]);
+
+void get_matrix_inv(matrix* pta[10]);
+void cal_input_matrix_inv(int num[3]);
+void cal_matrix_inv(matrix* pta[10], int num[3]);
+
+void get_determinant(matrix* pta[10]);
+void cal_input_matrix_determinant(int num[3]);
+void cal_matrix_determinant(matrix* pta[10],int num[3]);
+
+
+void get_adjoint_matrix(matrix *pta[10]);
+void cal_input_matrix_adjoint(int num[3]);
+void cal_matrix_adjoint(matrix* pta[10], int num[3]);
+
+
+
+void matrix_calculate()
+{
+    int count=1;
+
+    char chos1 = '\0';
+    char chos2 = '\0';
+    char chos3 = '\0';
+    char chos4 = '\0';
+    char chos5 = '\0';
+
+
+    matrix a0,a1,a2,a3,a4,a5,a6,a7,a8,a9;
+    matrix *pta[10];
+    pta[0]=&a0;  pta[1]=&a1;  pta[2]=&a2;  pta[3]=&a3;  pta[4]=&a4;
+    pta[5]=&a5;  pta[6]=&a6;  pta[7]=&a7;  pta[8]=&a8;  pta[9]=&a9;
+
+    while(1)
+    {
+        system("cls");
+        matrix_menu();  // 1
+
+        chos1 = getch();
+        switch(chos1)
+        {
+            case '0': //返回上一级
+                return;
+
+            case '1': //构造矩阵
+                system("cls");
+                cout << "【构造矩阵】" << endl << endl;
+                if(count<=5)
+                {
+                for(int i=count-1;i<5;i++)
+                 {
+                    *pta[i] = rc_create(count);  // 1
+                    cout << endl << "a" << i << endl << *pta[i] << endl;
+                    if(i==4)
+                    {
+                        cout << "无可继续构造的空矩阵，输入0返回主菜单(矩阵将被销毁), 或者按任意键返回上一级" << endl;
+                        chos5 = getch();
+                        if(chos5 == '0') return;
+
+                    }
+                    cout << "输入0退出构造, 按任意键继续构造" << endl;
+                    chos3 = getch();
+                    if(chos3 == '0')  break;
+                  }
+                }
+
+
+
+                break;
+
+            case '2': //矩阵运算
+                system("cls");
+                cout << "【矩阵运算】" << endl;
+
+                print_nonempty_matrix(pta); //1
+
+                calculate(pta);
+
+
+
+    //            print_all_name(name, count_name);
+                system("pause");
+                break;
+        }// switch(chos)
+
+        cout << endl;
+        system("pause");
+
+
+    }// while 主循环
+
+
+
+}//matrix_calculate
+
+
+
+void matrix_menu()
+{
+    cout << "矩阵可以实现的运算：" << endl << endl;
+    cout << "【矩阵加法】  " << "【矩阵减法】  " << "【矩阵相乘】" << endl;
+    cout << "【矩阵数乘】  " << "【矩阵相等】  " << "【矩阵求逆】" << endl;
+    cout << "【求行列式】  " << "【求伴随矩阵】" << endl;
+    cout << endl;
+    cout << "实现如下：" << endl << endl;
+    cout << "输入0-2： " << endl;
+    cout << "1.【构建矩阵】   2.【矩阵运算】  0.【返回上一级】(构建的矩阵会被全部销毁) " << endl;
+
+} // menu
+
+
+void print_nonempty_matrix(matrix *pta[10])
+{
+    cout << "不为空的矩阵：" << endl;
+    matrix temp;
+    for(int i=0;i<10;i++)
+    {
+        if(*pta[i] != temp)
+        {
+            cout << "a" << i << endl;
+            cout << *pta[i] << endl;
+        }
+    }
+}
+
+
+void calculate(matrix* pta[10])
+{
+    char op = '\0';
+    char chos5 = '\0';
+
+    print_cal_menu();
+
+    chos5 = getch();
+    switch(chos5)
+    {
+        case '0':
+            return ;
+
+        case '1':
+            op = '+';
+            matrix_plus(op,pta);
+            break;
+        case '2':
+            op = '-';
+            sub(op,pta);
+            break;
+        case '3':
+            matrix_mul(pta);
+            break;
+        case '4':
+            num_matrix(pta);
+            break;
+        case '5':
+            matrix_equal(pta);
+            break;
+        case '6':
+            get_matrix_inv(pta);
+            break;
+        case '7':
+            get_determinant(pta); // 得行列式
+            break;
+        case '8':
+            get_adjoint_matrix(pta); //得伴随矩阵
+            break;
+
+    }//switch
+
+
+}//calculate()
+
+
+
+void print_cal_menu()
+{
+    cout << endl;
+    cout << "请输入数字0-9" << endl;
+    cout << "1.【矩阵加法】  " << "2.【矩阵减法】  " << "3.【矩阵相乘】" << endl;
+    cout << "4.【矩阵数乘】  " << "5.【矩阵相等】  " ;
+    cout << "6.【矩阵求逆】  " << endl <<"7.【求行列式】  " << "8.【求伴随矩阵】 ";
+    cout << "0.【返回上一级】" << endl;
+    cout <<endl;
+}
+
+
+
+matrix rc_create(int &count)
+{
+    int r,c;
+    cout << "矩阵a0-a4可供用户自定义输入，当前为 a" << count-1 << " 矩阵" << endl << endl;
+   while(1)
+   {
+       cout << "请输入行和列： \n" ;
+        cin >> r >> c;
+        if(r>0 && c>0) break;
+        else cout << "不合法！ 行和列应该大于0" << endl;
+   }
+
+    matrix temp(r,c);
+    cin >> temp;
+    count++;
+    return temp;
+
+}
+
+
+
+void matrix_plus(char op, matrix* pta[10])
+{
+    char chos6 = '\0';
+    char chos7 = '\0';
+    int num[3]={0};
+
+    cout << "【矩阵相加】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】 0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            cal_input_12(op,num);
+            cal_plus(pta,num);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+}
+
+
+
+void cal_input_12(char op, int num[3])
+{
+    char chos8 = '\0';
+    switch(op)
+    {
+        case '+':                    // 01234567
+            cout << "请输入表达式 例如: a0=a1+a2 (不支持空格)" << endl;
+            break;
+        case '-':
+            cout << "请输入表达式 例如: a0=a1-a2 (不支持空格)" << endl;
+            break;
+
+    }
+    char exp[10] = "";
+    cin >> exp ;
+    num[0] = exp[1]-'0';  num[1] = exp[4]-'0'; num[2] = exp[7]-'0';
+
+}
+
+
+void cal_plus(matrix* pta[10], int  num[3])
+{
+    if( (*pta[num[1]]).getr() != (*pta[num[2]]).getr() || (*pta[num[1]]).getc() != (*pta[num[2]]).getc())
+    {
+        cout << "不合法！ 请输入同型矩阵 " << endl;
+        return;
+    }
+    else
+    {
+        *pta[num[0]] = *pta[num[1]] + *pta[num[2]];
+       cout << "结果是：" << endl << "a" << num[0] << endl <<*pta[num[0]];
+    }
+}
+
+void sub(char op, matrix* pta[10])
+{
+    char chos6 = '\0';
+    char chos7 = '\0';
+    int num[3]={0};
+
+    cout << "【矩阵相减】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】 0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            cal_input_12(op,num);
+            cal_sub(pta,num);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+}
+
+
+void cal_sub(matrix* pta[10], int  num[3])
+{
+     if( (*pta[num[1]]).getr() != (*pta[num[2]]).getr() || (*pta[num[1]]).getc() != (*pta[num[2]]).getc())
+    {
+        cout << "不合法！ 请输入同型矩阵 " << endl;
+        return;
+    }
+    else
+    {
+        *pta[num[0]] = *pta[num[1]] - *pta[num[2]];
+        cout << "结果是：" << endl << "a" << num[0] << endl <<*pta[num[0]];
+    }
+}
+
+
+void matrix_mul(matrix* pta[10])
+{
+    char chos6 = '\0';
+    int num[3]={0};
+    cout << "【矩阵相乘】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】 0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            cal_input_matrix_mul(num);
+            cal_matrix_mul(pta,num);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+}
+
+
+void cal_input_matrix_mul(int num[3])
+{
+    cout << "请输入表达式 例如: a0=a1*a2 (不支持空格)" << endl;
+    char exp[10] = "";
+    cin >> exp ;
+    num[0] = exp[1]-'0';  num[1] = exp[4]-'0'; num[2] = exp[7]-'0';
+
+}
+
+
+void cal_matrix_mul(matrix* pta[10], int num[3])
+{
+    if((*pta[num[1]]).getc() != (*pta[num[2]]).getr())
+    {
+        cout<<"不合法！第一个矩阵的 列数 应该和第二个矩阵的 行数 相同"<<endl;
+        return;
+    }
+    else
+    {
+        *pta[num[0]] = *pta[num[1]] * *pta[num[2]];
+       cout << "结果是：" << endl << "a" << num[0] << endl <<*pta[num[0]];
+    }
+}
+
+
+void num_matrix(matrix* pta[10])
+{
+    int mul[2] = {0};
+    char chos6 = '\0';
+    float ft=0;
+
+    cout << "【矩阵数乘】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】 0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            ft = cal_input_num_matrix(mul);
+            cal_num_matrix(pta,mul,ft);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+
+}
+
+
+float cal_input_num_matrix(int mul[2])
+{
+    cout << "请输入表达式 例如: a0=a1*num(浮点数) (不支持空格)" << endl;
+    char exp[20] = "";
+    cin >> exp ;
+    char *pt = &exp[6];
+    mul[0] = exp[1]-'0';  mul[1] = exp[4]-'0';
+    float temp = atof(pt);
+    return temp;
+
+}
+
+
+void cal_num_matrix(matrix* pta[10], int mul[2], float ft)
+{
+    *pta[mul[0]] = *pta[mul[1]] * ft ;
+     cout << "结果是：" << endl << "a" << mul[0] << endl << *pta[mul[0]];
+}
+
+
+void matrix_equal(matrix* pta[10])
+{
+    char chos6 = '\0';
+    int num[3]={0};
+    cout << "【矩阵相等】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】 0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            cal_input_equal(num);
+            cal_matrix_equal(pta,num);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+}
+
+
+void cal_input_equal(int num[3])
+{
+    cout << "请输入表达式 例如: a0=a1 (不支持空格)" << endl;
+    char exp[20] = "";
+    cin >> exp ;
+    num[0] = exp[1]-'0';  num[1] = exp[4]-'0';
+
+}
+
+
+void cal_matrix_equal(matrix* pta[10],int num[3])
+{
+    *pta[num[0]] = *pta[num[1]] ;
+    cout << "结果是：" << endl << "a" << num[0] << *pta[num[0]];
+}
+
+
+void get_matrix_inv(matrix* pta[10])
+{
+    char chos6 = '\0';
+    int num[3] = {0};
+
+    cout << "【矩阵求逆】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】  0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            cal_input_matrix_inv(num);
+            cal_matrix_inv(pta,num);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+}
+
+
+void cal_input_matrix_inv(int num[3])
+{
+    cout << "请输入你要求逆的矩阵名称 例如: a0 （直接输入，不支持空格）" << endl;
+    char exp[20] = "";
+    cin >> exp ;
+    num[0] = exp[1]-'0';
+}
+
+
+void cal_matrix_inv(matrix* pta[10], int num[3])
+{
+    float inv[100][100]={0};
+    get_inverse_start(*pta[num[0]], inv);
+}
+
+
+
+void get_determinant(matrix* pta[10])
+{
+     char chos6 = '\0';
+    int num[3] = {0};
+
+    cout << "【求行列式】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】  0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            cal_input_matrix_determinant(num);
+            cal_matrix_determinant(pta,num);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+}
+
+
+void cal_input_matrix_determinant(int num[3])
+{
+    cout << "请输入你要行列式的矩阵名称 例如: a0 （直接输入，不支持空格）" << endl;
+    char exp[20] = "";
+    cin >> exp ;
+    num[0] = exp[1]-'0';
+}
+
+
+void cal_matrix_determinant(matrix* pta[10],int num[3])
+{
+    cout << "行列式的值为  " ;
+    getA(*pta[num[0]]);
+    cout << endl;
+}
+
+
+void get_adjoint_matrix(matrix *pta[10])
+{
+      char chos6 = '\0';
+    int num[3] = {0};
+
+    cout << "【求伴随矩阵】请输入数字0-1" << endl;
+    cout <<" 1.【继续进行运算 】  0.【返回上一级】  " << endl;
+    chos6 = getch();
+     switch(chos6)
+    {
+        case '1':
+            cal_input_matrix_adjoint(num);
+            cal_matrix_adjoint(pta,num);
+            break;
+
+        case '0':
+            return ;
+    }//switch
+}
+
+
+void cal_input_matrix_adjoint(int num[3])
+{
+    cout << "请输入你要求伴随阵的矩阵名称 例如: a0 （直接输入，不支持空格）" << endl;
+    char exp[20] = "";
+    cin >> exp ;
+    num[0] = exp[1]-'0';
+}
+
+
+void cal_matrix_adjoint(matrix* pta[10], int num[3])
+{
+    float aj[100][100] = {0};
+    get_AJstart(*pta[num[0]], aj);
+}
